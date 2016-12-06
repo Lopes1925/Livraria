@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Produto</h1>
+
+    <table class="table-striped">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ produto.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ produto.nome }}</td>
+            </tr>
+            <tr>
+                <th>Quantidade</th>
+                <td>{{ produto.quantidade }}</td>
+            </tr>
+            <tr>
+                <th>Preço</th>
+                <td>{{ produto.preco }}</td>
+            </tr>
+            <tr>
+                <th>Tipo</th>
+                <td>{{ produto.tipo }}</td>
+            </tr>
+            <tr>
+                <th>Imagem</th>
+                <td>{{ produto.imagem }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('produtos_index') }}">Lista de Produtos</a>
+        </li>
+        <li>
+            <a href="{{ path('produtos_edit', { 'id': produto.id }) }}" class="btn btn-warning"><sapn class="glyphicon glyphicon-pencil"></span></a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
