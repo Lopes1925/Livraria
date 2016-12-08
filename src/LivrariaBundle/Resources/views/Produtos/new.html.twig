@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Cadastrar Novo Produto</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'} }) }}
         {{ form_widget(form) }}
         {#{{ form_row(form.nome, {"label":"Nome do Produto"}) }}#}
         {#{{ form_row(form.quantidade) }}#}
