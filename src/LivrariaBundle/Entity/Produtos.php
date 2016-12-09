@@ -30,7 +30,6 @@ class Produtos {
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="É obrigatório informar uma quantidade para o produto.")
-     * /**
      * @Assert\GreaterThanOrEqual(value = 0, message="A quantidade deve ser maior ou igual 0.")
      */
     private $quantidade;
