@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="cupom_item")
  */
-class CupomItem {
+class CupomItem implements \JsonSerializable {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -206,4 +206,14 @@ class CupomItem {
     {
         return $this->ordemItem;
     }
+    
+    public function jsonSerialize() {
+        return array(
+            'descricao' => $this->getDescricaoItem(),
+            'valor' => $this->getValorUnitario(),
+            'numOrdem' => $this->getOrdemItem(),
+            'codigo' => $this->getItemCod()
+        );
+    }
+
 }

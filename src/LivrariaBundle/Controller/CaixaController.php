@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use \LivrariaBundle\Entity\Cupom;
 use \LivrariaBundle\Entity\CupomItem;
+use \LivrariaBundle\Entity\Produtos;
 
 /**
  * Description of CaixaController
@@ -37,7 +38,7 @@ class CaixaController extends Controller{
     }
     
     /**
-     * @Route("/caixa/carregar")
+     * @Route("/caixa/carregar", name="pesquisar_produto")
      * @method("POST")
      */
     public function carregarProdutoAction(Request $request){
@@ -45,23 +46,37 @@ class CaixaController extends Controller{
         
         $codProd = $request->request->get('codigo');
         
+        $cupomId = $request->getSession()->get('cupom-id');
         $produto = $em->getRepository('LivrariaBundle:Produtos')->find($codProd);
         
-        if($produto == null){
-            return $this->json('erro');
+        
+        $cupom = $em->getRepository('LivrariaBundle:Cupom')->find($cupomId);
+        
+        $quantItem = $em->getRepository('LivrariaBundle:CupomItem')->findBy(array('cupomId' => $cupomId));
+        //dump(count($quantItem));die();
+        
+        //if($produto == null){
+        if($produto instanceof Produtos)
+        {
+            $novoItem = new CupomItem();
+            $novoItem->setCupomId($cupom);
+            $novoItem->setDescricaoItem($produto->getNome());
+            $novoItem->setItemCod($codProd);
+            $novoItem->setQuantidade(1);
+            $novoItem->setValorUnitario($produto->getPreco());
+            $novoItem->setOrdemItem(count($quantItem) + 1);
+
+            $em->persist($novoItem);
+            $em->flush();
+            
+            $retorno["status"] = "ok";
+            $retorno["produto"] = $produto;
+        }else{
+            $retorno["status"] = "erro";
+            $retorno["messagem"] = "Produto não encontrado";
+            
         }
-        
-        $novoItem = new CupomItem();
-        $novoItem->setCupomId($request->getSession()->get('cupom-id'));
-        $novoItem->setDescricaoItem($produto->getNome());
-        $novoItem->setItemCod($codProd);
-        $novoItem->setQuantidade(1);
-        $novoItem->setValorUnitario($produto->getPreco());
-        
-        $em->persist($novoItem);
-        $em->flush();
-        
-        return $this->json('ok');
+        return $this->json($retorno);
     }
     
     /**
@@ -126,7 +141,7 @@ class CaixaController extends Controller{
     }
     
     /**
-     * @Route("/caixa/listar")
+     * @Route("/caixa/listar", name="listagem")
      */
     public function listarItensAction(Request $request){
         $em = $this->getDoctrine()->getManager();
