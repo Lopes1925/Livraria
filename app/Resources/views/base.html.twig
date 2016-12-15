@@ -24,6 +24,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        {% if (is_granted('ROLE_ADMIN')) %}
                         <li><a href="{{ path('painel') }}">Painel</a></li>
                         <li>
                             <a id="menu-produtos" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Produtos<span class="caret"</span></a>
@@ -33,7 +34,7 @@
                             </ul>
                         </li>
                         <li><a href="#">Caixa</a></li>
-                        <li><a href="#">Usuários</a></li>
+                        <li><a href="#">{{ logout_path(key = null) }}</a></li>
                     </ul>
                     <form class="navbar-form navbar-right">
                         <input type="text" class="form-control" placeholder="Search...">
